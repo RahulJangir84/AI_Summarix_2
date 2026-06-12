@@ -1,0 +1,63 @@
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+
+CREATE TABLE users (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    email_id VARCHAR(255) UNIQUE NOT NULL,
+    full_name VARCHAR(255) NOT NULL,
+    customer_id VARCHAR(255) UNIQUE,
+    price_id VARCHAR(255),
+    status VARCHAR(50) DEFAULT 'inactive',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE pdf_summary (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id VARCHAR(255) NOT NULL,
+    original_file_url TEXT NOT NULL,
+    summary_text TEXT NOT NULL,
+    status VARCHAR(50) DEFAULT 'completed',
+    title TEXT,
+    file_name TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE payments (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    amount INTEGER NOT NULL,
+    status VARCHAR(50) NOT NULL,
+    stripe_payment_id VARCHAR(255) UNIQUE NOT NULL,
+    price_id VARCHAR(255) NOT NULL,
+    user_email VARCHAR(255) NOT NULL REFERENCES users(email_id),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+
+
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER update_users_updated_at
+    BEFORE UPDATE ON users
+  FOR EACH ROW
+  EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_pdf_summary_updated_at
+      BEFORE UPDATE ON pdf_summary
+  FOR EACH ROW
+  EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_payments_updated_at
+      BEFORE UPDATE ON payments
+  FOR EACH ROW
+  EXECUTE FUNCTION update_updated_at_column();
+
+
+
