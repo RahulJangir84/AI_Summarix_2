@@ -6,8 +6,6 @@ import { useState, useRef, useEffect } from "react";
 import { MessageCircle, X, Send, Loader2, Trash2, GripHorizontal } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChatMessage } from "./chat-message";
-import ChatInput from "../speech/chatInput";
-import useVoiceInput from "@/hook/speech-hook";
 interface ChatWidgetProps {
   summaryText: string;
 }

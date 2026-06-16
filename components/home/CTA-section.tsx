@@ -8,11 +8,11 @@ import { ArrowRight } from "lucide-react";
 const words = [
   { text: "Ready" },
   { text: "to" },
-  { text: "Save" },
-  { text: "Hours" },
+  { text: "save" },
+  { text: "hours" },
   { text: "of" },
-  { text: "Reading" },
-  { text: "Time?" },
+  { text: "reading" },
+  { text: "time?" },
 ];
 
 export default function CTASection() {
