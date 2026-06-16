@@ -100,7 +100,7 @@ export default function HowItWorksSection() {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.1 }}
-      className="relative bg-[#080918]"
+      className="relative bg-white dark:bg-[#080918]"
     >
       {/* Background */}
       <div className="pointer-events-none absolute inset-0">
@@ -123,16 +123,16 @@ export default function HowItWorksSection() {
           variants={itemVariants}
           className="text-center"
         >
-          <div className="inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-950/50 px-4 py-1.5 text-sm font-medium text-indigo-300 mb-6">
+          <div className="inline-flex items-center gap-2 rounded-full border border-indigo-200 dark:border-indigo-500/30 bg-indigo-50/80 dark:bg-indigo-950/50 px-4 py-1.5 text-sm font-medium text-indigo-600 dark:text-indigo-300 mb-6">
             How it Works
           </div>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-4 leading-tight">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white mb-4 leading-tight">
             Four steps to{" "}
             <span className="bg-[#7882E3] bg-clip-text text-transparent">
               instant clarity
             </span>
           </h2>
-          <p className="text-slate-400 text-base lg:text-lg max-w-2xl mx-auto">
+          <p className="text-slate-600 dark:text-slate-400 text-base lg:text-lg max-w-2xl mx-auto">
             From raw PDF to polished summary in under a minute. No setup, no
             learning curve — just results.
           </p>

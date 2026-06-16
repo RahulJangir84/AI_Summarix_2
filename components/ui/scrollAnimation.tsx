@@ -14,14 +14,14 @@ export default function ScrollHorizontal() {
     const totalDistance = (items.length - 1) * (ITEM_WIDTH + GAP)
     const INITIAL_OFFSET = -140
 
-const x = useTransform(
-  scrollYProgress,
-  [0, 1],
-  [INITIAL_OFFSET, -(totalDistance + 200)]
-)
+    const x = useTransform(
+        scrollYProgress,
+        [0, 1],
+        [INITIAL_OFFSET, -(totalDistance + 200)]
+    )
 
     return (
-        <div id="example">
+        <div id="example" className="bg-white dark:bg-[#080918] transition-colors duration-300">
 
             <div ref={containerRef} className="scroll-container">
                 <div className="sticky-wrapper">
