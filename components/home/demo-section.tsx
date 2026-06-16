@@ -1,8 +1,9 @@
 "use client";
-import { Pizza } from "lucide-react";
 import { containerVariants, itemVariants } from "@/utils/constants";
 import { MotionSection, MotionDiv } from "../common/motion";
 import CompareDemo from "../compare-demo";
+import { Sparkles } from "lucide-react";
+
 export default function DemoSection() {
   return (
     <MotionSection
@@ -10,31 +11,79 @@ export default function DemoSection() {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.005 }}
-      className="relative flex justify-center items-center overflow-hidden bg-gradient-to-l from-indigo-100 via-white to-indigo-200/70 dark:bg-gradient-to-tl dark:from-[#020618] dark:via-[#020618] dark:to-[#020618] dark:via-75%"
+      className="relative overflow-hidden bg-[#080918]"
     >
-        
-      <div className="py-7 lg:pt-8 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div></div>
-        <div className="flex flex-col items-center text-center space-y-6">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute top-1/4 left-1/4 h-[500px] w-[500px] rounded-full bg-indigo-600/8 blur-[130px]" />
+        <div className="absolute bottom-0 right-1/4 h-[400px] w-[400px] rounded-full bg-violet-600/8 blur-[120px]" />
+      </div>
+
+      <div className="pointer-events-none absolute inset-0 overflow-hidden opacity-20">
+        <div className="absolute top-12 left-8 rotate-[-6deg] font-mono text-xs text-indigo-400 leading-relaxed">
+          <div>{"{"}</div>
+          <div>&nbsp;&nbsp;"summary": "AI-powered...",</div>
+          <div>&nbsp;&nbsp;"pages": 42,</div>
+          <div>&nbsp;&nbsp;"time": "2.3s"</div>
+          <div>{"}"}</div>
+        </div>
+        <div className="absolute bottom-20 right-10 rotate-[4deg] font-mono text-xs text-violet-400 leading-relaxed">
+          <div>uploadPDF(file)</div>
+          <div>&nbsp;&nbsp;.then(getSummary)</div>
+          <div>&nbsp;&nbsp;.then(render)</div>
+        </div>
+        <div className="absolute top-1/2 left-2 rotate-[-3deg] font-mono text-xs text-blue-400 leading-relaxed hidden lg:block">
+          <div>// Processing...</div>
+          <div>const insight =</div>
+          <div>&nbsp;&nbsp;await analyze(pdf)</div>
+        </div>
+        <div className="absolute bottom-170 right-10 rotate-[45deg] font-mono text-xs text-violet-400 leading-relaxed">
+          <div>uploadPDF(file)</div>
+          <div>&nbsp;&nbsp;.then(getSummary)</div>
+          <div>&nbsp;&nbsp;.then(render)</div>
+        </div>
+      </div>
+
+      <div className="relative z-10 py-20 lg:py-27 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col items-center text-center">
+
+          {/* Section Tag */}
+          <MotionDiv variants={itemVariants} className="mb-6">
+            <div className="inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-950/50 px-4 py-1.5 text-sm font-medium text-indigo-300">
+              Live Demo
+            </div>
+          </MotionDiv>
+
+          {/* Heading */}
+          <MotionDiv variants={itemVariants} className="mb-4">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white leading-tight max-w-3xl mx-auto">
+              See the{" "}
+              <span className="bg-[#7882E3] bg-clip-text text-transparent">
+                transformation
+              </span>{" "}
+              in action
+            </h2>
+          </MotionDiv>
+
+          <MotionDiv variants={itemVariants} className="mb-16">
+            <p className="text-slate-400 text-base lg:text-lg max-w-xl mx-auto">
+              Drag the slider to compare the raw PDF against the AI-generated
+              summary — same content, 10x easier to read.
+            </p>
+          </MotionDiv>
+
+          {/* Compare Widget with glow border */}
           <MotionDiv
             variants={itemVariants}
-            className="inline-flex items-center justify-center p-2 rounded-2xl bg-gray-100/80 backdrop-blur-xs mx-auto px-4 sm:px-6"
+            className="relative"
           >
-            <Pizza className="lg:w-6 lg:h-6 w-4 h-4 text-indigo-600" />
+            {/* Glow effect */}
+            <div className="absolute -inset-1 rounded-3xl bg-[#666bae] opacity-30 blur-lg" />
+            <div className="relative rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
+              <CompareDemo />
+            </div>
           </MotionDiv>
-          <MotionDiv variants={itemVariants} className="text-center mb-14">
-            <h3 className="lg:text-3xl md:text-2xl sm:text-xl text-xl max-w-3xl font-bold mx-auto px-4 sm:px-6 dark:text-[#d2d2d7]">
-              Watch how Summarix can help you to transform{" "}
-              <span className="text-indigo-600 dark:text-indigo-400/90">this next.js course PDF </span>
-              into an easy-to-read summary!
-            </h3>
-          </MotionDiv>
-          <MotionDiv
-            variants={itemVariants}
-            className="flex justify-center items-center px-2 sm:px-4 lg:px-6"
-          >
-            <CompareDemo />
-          </MotionDiv>
+
+          {/* Labels */}
         </div>
       </div>
     </MotionSection>

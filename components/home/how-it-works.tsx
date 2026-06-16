@@ -1,119 +1,147 @@
-import { BrainCircuit, FileOutput, FileText, MoveRight } from "lucide-react";
-import { ReactNode } from "react";
+"use client";
+import { BrainCircuit, FileOutput, FileText, ArrowRight } from "lucide-react";
+import { ReactNode, useRef } from "react";
 import { containerVariants, itemVariants } from "@/utils/constants";
-import { MotionSection, MotionDiv, MotionH2, MotionH3 } from "../common/motion";
+import { MotionSection, MotionDiv } from "../common/motion";
+import { motion, useInView } from "motion/react";
+import ScrollHorizontal from "../ui/scrollAnimation";
+
 type Step = {
   icon: ReactNode;
+  number: string;
   label: string;
   description: string;
+  color: string;
+  glowColor: string;
 };
-export default function HowItWorksSection() {
-  const steps: Step[] = [
-    {
-      icon: (
-        <FileText
-          strokeWidth={1.5}
-          className="h-10 w-10 sm:h-12 sm:w-12 lg:h-16 lg:w-16 dark:text-indigo-400/90"
-        />
-      ),
-      label: "Upload PDF",
-      description: "Simply drag and drop your PDF file or click to upload.",
-    },
-    {
-      icon: (
-        <BrainCircuit
-          strokeWidth={1.5}
-           className="h-10 w-10 sm:h-12 sm:w-12 lg:h-16 lg:w-16 dark:text-indigo-400/90"
-        />
-      ),
-      label: "AI Analysis",
-      description:
-        "Our advanced AI processes and analyzes your document instantly",
-    },
-    {
-      icon: (
-        <FileOutput
-          strokeWidth={1.5}
-           className="h-10 w-10 sm:h-12 sm:w-12 lg:h-16 lg:w-16 dark:text-indigo-400/90"
-        />
-      ),
-      label: "Get Summary",
-      description: "Receive a clear ,consie summary of your document",
-    },
-  ];
+
+const steps: Step[] = [
+  {
+    icon: <FileText strokeWidth={1.5} className="h-7 w-7" />,
+    number: "01",
+    label: "Upload Your PDF",
+    description:
+      "Drag and drop any PDF — research papers, textbooks, reports, legal docs. We handle any format up to 50MB.",
+    color: "from-indigo-500 to-indigo-600",
+    glowColor: "rgba(99,102,241,0.3)",
+  },
+  {
+    icon: <BrainCircuit strokeWidth={1.5} className="h-7 w-7" />,
+    number: "02",
+    label: "AI Analyzes in Seconds",
+    description:
+      "Gemini AI reads, understands, and distills the key insights, arguments, and takeaways from your document.",
+    color: "from-violet-500 to-purple-600",
+    glowColor: "rgba(139,92,246,0.3)",
+  },
+  {
+    icon: <FileOutput strokeWidth={1.5} className="h-7 w-7" />,
+    number: "03",
+    label: "Get Your Summary",
+    description:
+      "Receive a beautifully structured, easy-to-read summary you can save, share, or export as Markdown.",
+    color: "from-blue-500 to-indigo-500",
+    glowColor: "rgba(59,130,246,0.3)",
+  },
+];
+
+function StepCard({ step, index }: { step: Step; index: number }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+
   return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 60 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.6, delay: index * 0.15, ease: [0.16, 1, 0.3, 1] }}
+      className="group relative flex flex-col"
+    >
+      {/* Card */}
+      <div className="relative flex flex-col gap-5 p-7 rounded-2xl border border-white/8 bg-white/3 backdrop-blur-sm transition-all duration-500 hover:border-white/15 hover:bg-white/6 hover:-translate-y-2 h-full">
+        {/* Glow on hover */}
+        <div
+          className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl -z-10"
+          style={{ background: step.glowColor }}
+        />
+
+        {/* Step number */}
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-bold tracking-widest text-slate-600 dark:text-slate-500 uppercase">
+            Step {step.number}
+          </span>
+          {/* Icon */}
+          <div
+            className={`flex items-center justify-center h-12 w-12 rounded-xl bg-gradient-to-br ${step.color} text-white shadow-lg`}
+          >
+            {step.icon}
+          </div>
+        </div>
+
+        <div>
+          <h3 className="text-xl font-bold text-white mb-2">{step.label}</h3>
+          <p className="text-slate-400 text-sm leading-relaxed">{step.description}</p>
+        </div>
+
+        {/* Bottom accent line */}
+        <div
+          className={`h-px w-0 group-hover:w-full transition-all duration-700 bg-gradient-to-r ${step.color} rounded-full mt-auto`}
+        />
+      </div>
+    </motion.div>
+  );
+}
+
+export default function HowItWorksSection() {
+  return (
+    <>
     <MotionSection
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, amount: 0.25 }}
-      className="relative overflow-hidden pt-4"
+      viewport={{ once: true, amount: 0.1 }}
+      className="relative bg-[#080918]"
     >
       {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-r from-indigo-50 via-white to-indigo-100  dark:bg-gradient-to-b dark:from-[#020618] dark:via-[#020618] dark:to-[#1d2337] dark:via-25%" />
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent,rgba(99,102,241,0.03)_50%,transparent)]" />
+        {/* Grid dots pattern */}
+        <div
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle, #6366f1 1px, transparent 1px)",
+            backgroundSize: "40px 40px",
+          }}
+        />
+      </div>
 
-      {/* Gradient Blobs */}
-      <div className="absolute -top-32 -left-32 h-80 w-80 rounded-full bg-indigo-400/20 dark:bg-slate-950/50 blur-3xl" />
-      <div className="absolute top-1/2 -right-32 h-96 w-96 rounded-full bg-purple-400/20 dark:bg-slate-800/10 blur-3xl" />
-      <div className="relative z-10 py-12 lg:py-20 max-w-5xl mx-auto px-4 sm:px-6 lg:px-6 lg:pt-12">
-        <div className="text-center mb-14">
-          <MotionH2 variants={itemVariants} className="text-xl font-bold uppercase mb-4 text-indigo-600 dark:text-slate-400 font-sans tracking-wider">
-            How it works
-          </MotionH2>
-          <MotionH3 variants={itemVariants} className="lg:text-3xl md:text-2xl sm:text-xl text-xl max-w-2xl mx-auto font-bold mb-4 dark:text-[#d2d2d7]">
-            Transform any PDF into as easy-to-digest summary in three simple
-            steps
-          </MotionH3>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto relative">
-          {steps.map((step, index) => (
-            <MotionDiv
-              variants={itemVariants}
-              key={index}
-              className="relative flex items-stretch"
-            >
-              <StepItem {...step} />
-              {index < steps.length - 1 && (
-                <div className="hidden md:block absolute top-1/2 -right-8 transform -translate-y-1/2 z-10">
-                  <MoveRight
-                    size={32}
-                    strokeWidth={1.5}
-                    className="text-indigo-600 dark:text-slate-500"
-                  ></MoveRight>
-                </div>
-              )}
-            </MotionDiv>
-          ))}
-        </div>
+      <div className="relative z-10 py-24 lg:pt-14 pb-0 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        {/* Section Header */}
+        <MotionDiv
+          variants={itemVariants}
+          className="text-center"
+        >
+          <div className="inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-950/50 px-4 py-1.5 text-sm font-medium text-indigo-300 mb-6">
+            How it Works
+          </div>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-4 leading-tight">
+            Four steps to{" "}
+            <span className="bg-[#7882E3] bg-clip-text text-transparent">
+              instant clarity
+            </span>
+          </h2>
+          <p className="text-slate-400 text-base lg:text-lg max-w-2xl mx-auto">
+            From raw PDF to polished summary in under a minute. No setup, no
+            learning curve — just results.
+          </p>
+        </MotionDiv>
+        {/* Steps Grid */}
+
       </div>
     </MotionSection>
-  );
-}
-
-function StepItem({ icon, label, description }: Step) {
-  return (
-    <div
-      className="relative p-6 rounded-2xl bg-white dark:bg-slate-900/40
-border border-indigo-200/80 dark:border-slate-800
-shadow-[0_8px_30px_-20px_rgba(0,0,0,0.25)]
-transition-all duration-300
-hover:-translate-y-[2px]
-hover:shadow-[0_16px_40px_-20px_rgba(0,0,0,0.3)] 
-group w-[90%] md:w-full mx-auto"
-    >
-      <div className="flex flex-col gap-4 h-full items-center">
-        <div className="flex items-center justify-center h-16 w-16 sm:h-20 sm:w-20 lg:h-24 lg:w-24 rounded-2xl bg-linear-to-br from-indigo-500/10 to-transparent group-hover:bg-indigo-500/20 transition-colors">
-          <div className="text-indigo-600 dark:text-slate-300 ">{icon}</div>
-        </div>
-        <div className="flex flex-col gap-1 flex-1 justify-between">
-          <h4 className="text-center text-base sm:text-lg lg:text-xl font-bold dark:text-[#d2d2d7]">
-            {label}
-          </h4>
-          <p className="text-center text-xs sm:text-sm text-gray-600 dark:text-slate-400">
-            {description}
-          </p>
-        </div>
-      </div>
-    </div>
+      <ScrollHorizontal />
+    </>
   );
 }

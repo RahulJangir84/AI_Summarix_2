@@ -12,7 +12,7 @@ export default async function Page({params,}: {
   if(!summary){
     return (
       <div>
-        Summary not found
+        Summary not found 
       </div>
     );
   }
