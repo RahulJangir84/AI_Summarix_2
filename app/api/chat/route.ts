@@ -1,15 +1,15 @@
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { convertToModelMessages, streamText } from 'ai';
 
-if(!process.env.GEMINI_API_KEY){
-  throw new Error("GEMINI_API_KEY is not defined");
-}
-const google = createGoogleGenerativeAI({
-  apiKey: process.env.GEMINI_API_KEY,
-});
-
 export async function POST(req: Request) {
   try {
+    if(!process.env.GEMINI_API_KEY){
+      throw new Error("GEMINI_API_KEY is not defined");
+    }
+    const google = createGoogleGenerativeAI({
+      apiKey: process.env.GEMINI_API_KEY,
+    });
+
     //take the request from chat widget and extract messages history and summary_text from the json payload
     const { messages, summary_text } = await req.json();
 

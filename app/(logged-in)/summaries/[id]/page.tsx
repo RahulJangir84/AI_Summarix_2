@@ -4,7 +4,7 @@ import SourceInfo from "@/components/summaries/source-info";
 import SummarySlider from "@/components/summaries/summary-slider";
 import ChatWidget from "@/components/chat/chat-widget";
 
-export default async function Page({params,}: {
+export default async function Page({params}: {
   params: Promise<{ id: string }>;
 }){
   const { id } = await params;

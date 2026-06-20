@@ -1,5 +1,11 @@
 import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
 import { extractTextFromPdf } from "./ocr";
+import {RecursiveCharacterTextSplitter} from "@langchain/textsplitters";
+
+const splitter= new RecursiveCharacterTextSplitter({
+  chunkSize: 1000,
+  chunkOverlap: 200,
+})
 
 export async function fetchAndExtractPdfText(fileUrl: string) {
   const response = await fetch(fileUrl);
@@ -10,7 +16,9 @@ export async function fetchAndExtractPdfText(fileUrl: string) {
   // trying normal extraction 
   const loader = new PDFLoader(new Blob([arrayBuffer]));
   const docs = await loader.load();
-  let text = docs.map((doc) => doc.pageContent).join("\n").trim();
+  const chunks =await splitter.splitDocuments(docs);
+  let text=chunks.map((chunk:any)=>chunk.pageContent).join("\n");
+
 
   // Fallback to OCR if text is empty or very short (likely handwritten or image-based PDF)
   if (text.length < 50) {

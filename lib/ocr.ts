@@ -1,29 +1,30 @@
-import vision from "@google-cloud/vision";
-import { pdf } from "pdf-to-img";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-function getVisionClient() {
-  return new vision.ImageAnnotatorClient();
-}
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
 export async function extractTextFromPdf(pdfBuffer: Buffer): Promise<string> {
-  const client = getVisionClient();
-  const pageTexts: string[] = [];
-
-  // pdf-to-img handles rendering internally — no canvas setup needed
-  const doc = await pdf(pdfBuffer, { scale: 3 });
-
-  for await (const pageImageBuffer of doc) {
-    const [result] = await client.documentTextDetection({
-      image: { content: pageImageBuffer },
+  try {
+    const model = genAI.getGenerativeModel({
+      model: "gemini-2.5-flash",
     });
 
-    const pageText = result.fullTextAnnotation?.text ?? "";
-    pageTexts.push(pageText);
-  }
+    const result = await model.generateContent([
+      {
+        inlineData: {
+          data: pdfBuffer.toString("base64"),
+          mimeType: "application/pdf",
+        },
+      },
+      "You are an expert OCR system. Extract and transcribe all text from this PDF file. Do not summarize, just transcribe everything exactly as written.",
+    ]);
 
-  if (pageTexts.length === 0) {
-    throw new Error("Failed to extract text from PDF using OCR");
+    const text = result.response.text();
+    if (!text) {
+      throw new Error("Empty text returned from Gemini OCR");
+    }
+    return text;
+  } catch (error) {
+    console.error("Gemini OCR extraction failed:", error);
+    throw error;
   }
-
-  return pageTexts.join("\n\n--- Page Break ---\n\n");
 }
