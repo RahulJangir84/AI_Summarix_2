@@ -1,5 +1,6 @@
 import Stripe from "stripe";
 import { getDbConnection } from "./database";
+import { logger } from "./logger";
 
 export async function handleCheckoutSession({session,stripe}:{
     session:Stripe.Checkout.Session,
@@ -45,7 +46,8 @@ async function createOrUpdateUser({
             await sql`INSERT INTO users (email_id,full_name,customer_id,price_id,status) VALUES (${email},${fullName},${customerId},${priceId},${status})`;
         }
     }catch(error){
-        console.log(error);
+        logger.error({error, email },"Failed to create or update user in database during stripe sync");
+        // console.log(error);
     }
 }
 async function createPaymentSession({
@@ -65,7 +67,8 @@ async function createPaymentSession({
         
     }
     catch(error){
-        console.log(error);
+        logger.error({error, email },"Failed to insert payment record in database during stripe sync");
+        // console.log(error);
     }
 }
 
@@ -77,9 +80,8 @@ export async function deleteSubscription({subscriptionId,stripe}:{
         const sql=await getDbConnection();
         const subscription=await stripe.subscriptions.retrieve(subscriptionId);
         await sql`UPDATE users SET status='inactive' WHERE customer_id=${subscription.customer}`;
-        console.log("subscription deleted successfully");
-    }
-    catch(error){
-        console.log(error);
+        logger.info("User subscription successfully marked inactive in database");
+    } catch (error) {
+        logger.error({error, subscriptionId },"Failed to mark user subscription inactive in database");
     }
 }

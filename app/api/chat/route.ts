@@ -1,9 +1,11 @@
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { convertToModelMessages, streamText } from 'ai';
+import { logger } from "@/lib/logger";
 
 export async function POST(req: Request) {
   try {
     if(!process.env.GEMINI_API_KEY){
+      logger.error("Gemini API key missing in environment variables");
       throw new Error("GEMINI_API_KEY is not defined");
     }
     const google = createGoogleGenerativeAI({
@@ -32,7 +34,7 @@ Please answer the user's questions based primarily on the document above. Be fri
     // Send the raw stream down directly to the client
     return result.toUIMessageStreamResponse();
   } catch (error) {
-    console.error("Error in chat route:", error);
+    logger.error({error},"Error in chat API route");
     return new Response(JSON.stringify({ error: "Failed to generate chat response" }), { status: 500 });
   }
 }

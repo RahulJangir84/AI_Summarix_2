@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
-import { handleCheckoutSession,deleteSubscription } from "@/lib/payment";
+import { handleCheckoutSession, deleteSubscription } from "@/lib/payment";
+import { logger } from "@/lib/logger";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -10,13 +11,14 @@ export async function POST(req: NextRequest) {
     const sig = req.headers.get("stripe-signature");
 
     if (!sig) {
+        logger.warn("Payments webhook call received with missing Stripe signature");
         return NextResponse.json({status:"error",message:"Missing signature"}, {status:400});
     }
     let event;
     try{
         event = stripe.webhooks.constructEvent(payload, sig, process.env.STRIPE_WEBHOOK_SECRET!);
     }catch(error){
-        console.log(error);
+        logger.error({error},"Failed to construct Stripe webhook event from signature");
         return NextResponse.json({status:"error",message:"Invalid signature"}, {status:400});
     }
 
@@ -42,7 +44,7 @@ export async function POST(req: NextRequest) {
                 console.log(`Unhandled event type ${event.type}`);
         }
     }catch(error){
-        console.log(error);
+        logger.error({error,eventType: event.type },"Error occurred while processing Stripe webhook handler");
         return NextResponse.json({status:"error",message:"webhook handler issue"}, {status:400});
     }
 

@@ -1,6 +1,7 @@
 import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
 import { extractTextFromPdf } from "./ocr";
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
+import { logger } from "./logger";
 
 const splitter = new RecursiveCharacterTextSplitter({
   chunkSize: 1000,
@@ -9,7 +10,7 @@ const splitter = new RecursiveCharacterTextSplitter({
 
 
 export async function getPdfBufferAndText(fileUrl: string) {
-  console.log("Fetching PDF from URL:", fileUrl);
+  logger.info({ fileUrl },"Fetching PDF from URL:");
   const response = await fetch(fileUrl);
   if (!response.ok) {
     throw new Error(`Failed to fetch PDF: ${response.statusText} (URL: ${fileUrl})`);
@@ -31,7 +32,7 @@ export async function fetchAndExtractPdfText(fileUrl: string) {
   let text = pdfText;
   // Fallback to OCR if text is empty or very short (likely handwritten or image-based PDF)
   if (text.trim().length < 50) {
-    console.log("OCR is being used");
+    logger.info("OCR is being used");
     try {
       const ocrText = await extractTextFromPdf(buffer);
 
@@ -39,7 +40,7 @@ export async function fetchAndExtractPdfText(fileUrl: string) {
         text = ocrText;
       }
     } catch (error) {
-      console.error("OCR fallback failed:", error);
+      logger.error({error,fileUrl } ,"OCR fallback extraction failed");
     }
   }
 

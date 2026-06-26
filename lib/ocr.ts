@@ -1,8 +1,10 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { logger } from "./logger";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
 export async function extractTextFromPdf(pdfBuffer: Buffer): Promise<string> {
+  logger.info({ bufferSize: pdfBuffer.length },"Executing Gemini OCR text extraction on PDF buffer");
   try {
     const model = genAI.getGenerativeModel({
       model: "gemini-2.5-flash",
@@ -22,9 +24,11 @@ export async function extractTextFromPdf(pdfBuffer: Buffer): Promise<string> {
     if (!text) {
       throw new Error("Empty text returned from Gemini OCR");
     }
+    
+    logger.info({ textLength: text.length },"Successfully extracted text via Gemini OCR");
     return text;
   } catch (error) {
-    console.error("Gemini OCR extraction failed:", error);
+    logger.error({error},"Gemini OCR extraction failed");
     throw error;
   }
 }

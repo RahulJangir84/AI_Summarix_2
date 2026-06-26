@@ -8,6 +8,7 @@ import { getDbConnection } from "@/lib/database";
 import { formatPdfNameAsTitle } from "@/utils/format";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { logger } from "@/lib/logger";
 
 interface PdfSummaryProps {
   userId?: string;
@@ -29,6 +30,7 @@ export async function generatePdfSummary(
   }[],
 ) {
   if (!uploadResponse || uploadResponse.length === 0) {
+    logger.warn("PDF generation aborted: empty upload response");
     return {
       success: false,
       message: "File upload failed",
@@ -36,15 +38,18 @@ export async function generatePdfSummary(
     };
   }
 
-const { url: pdfUrl, name: pdfName } = uploadResponse[0].serverData.file;
+  const { url: pdfUrl, name: pdfName } = uploadResponse[0].serverData.file;
 
   if (!pdfUrl) {
+    logger.warn("PDF generation aborted: missing file URL");
     return {
       success: false,
       message: "File upload failed",
       data: null,
     };
   }
+
+  logger.info({ pdfName, pdfUrl },"Starting PDF summary generation");
 
   try {
     const pdfText = await fetchAndExtractPdfText(pdfUrl);
@@ -55,22 +60,22 @@ const { url: pdfUrl, name: pdfName } = uploadResponse[0].serverData.file;
       summary = await generateSummaryFromGeminiAPI(pdfText);
       console.log({ summary });
     } catch (error) {
-      console.log(error);
+      logger.error({ error,pdfName },"Gemini summary generation failed, attempting OpenAI fallback");
       if (error instanceof Error && error.message === "Rate limit exceeded") {
         try {
           summary = await generateSummaryFromOpenAI(pdfText);
           console.log(summary);
         } catch (geminiError) {
-          console.error(
-            "OpenAI API failed after Gemini rate limit exceeded",
-            geminiError,
-          );
+          logger.error({ geminiError,pdfName },"OpenAI API fallback also failed")
           throw new Error("Summary generation failed");
         }
+      } else {
+        throw error;
       }
     }
 
     if (!summary) {
+      logger.error({pdfName}, "Summary generation returned empty output");
       return {
         success: false,
         message: "Summary generation failed",
@@ -87,7 +92,7 @@ const { url: pdfUrl, name: pdfName } = uploadResponse[0].serverData.file;
       },
     };
   } catch (error) {
-    console.log("Error uploading file", error);
+    logger.error({error ,pdfName },"Error generating PDF summary" );
     return {
       success: false,
       message: "File upload failed",
@@ -125,7 +130,7 @@ async function savePdfSummary({
         `;
     return savedSummary;
   } catch (error) {
-    console.log("Error saving pdf", error);
+    logger.error({error ,pdfName },"Failed to insert PDF summary into database");
     throw error;
   }
 }
@@ -140,6 +145,7 @@ export async function saveSummaryToDatabase({
   try {
     const { userId } = await auth();
     if (!userId) {
+      logger.warn("Unauthorized saveSummaryToDatabase attempt");
       return {
         success: false,
         message: "User not found",
