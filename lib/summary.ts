@@ -29,6 +29,7 @@ export async function getSummaryById(id: string) {
       title,
       file_name,
       summary_text,
+      notion_page_url,
       original_file_url,
       status, 
       created_at,

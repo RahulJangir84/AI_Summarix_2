@@ -3,6 +3,7 @@ import { ExternalLink, FileText } from "lucide-react";
 import { Button } from "../ui/button";
 import DownloadButton from "./downloadButton";
 import QuizSection from "./quizSection";
+import NotionButton from "./notion-button";
 
 export default function SourceInfo({id, original_file_url, file_name, title, summary_text, created_at}: {
     id:string;
@@ -37,6 +38,7 @@ export default function SourceInfo({id, original_file_url, file_name, title, sum
 
                 <DownloadButton file_name={file_name} created_at={created_at} title={title} summary_text={summary_text}/>
                 <QuizSection id={id}/>
+                <NotionButton summary_text={summary_text} title={title}  />
             </div>
 
         </div>
