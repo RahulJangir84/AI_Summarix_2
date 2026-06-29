@@ -6,6 +6,8 @@ import { clerkClient } from "@clerk/nextjs/server";
 import { Client, isFullPage } from "@notionhq/client";
 import { BlockObjectRequest } from "@notionhq/client/build/src/api-endpoints";
 import { getDbConnection } from "@/lib/database";
+import {markdownToBlocks }from '@tryfabric/martian';
+
 
 function chunkText(text: string, chunkSize = 1900): string[] {
   const chunks: string[] = [];
@@ -16,11 +18,11 @@ function chunkText(text: string, chunkSize = 1900): string[] {
 }
 
 export async function exportSummaryToNotion({
-  summary_text, title ,notion_page_url, summary_id
+  summary_text, title , summary_id
 }: {
   summary_text: string;
   title: string;
-  notion_page_url?: string;
+
   summary_id: string;
 }) {
   const { userId } = await auth();
@@ -44,20 +46,23 @@ export async function exportSummaryToNotion({
     const notion = new Client({
       auth: accessToken,
     });
+    const allBlocks=markdownToBlocks(summary_text) as BlockObjectRequest[]; 
+    const initialBlocks=allBlocks.slice(0,100);
 
-    const paragraphBlocks: BlockObjectRequest[] = chunkText(summary_text).map(
-      (chunk) => ({
-        object: "block",
-        type: "paragraph",
-        paragraph: {
-          rich_text: [{ type: "text", text: { content: chunk } }],
-        },
-      })
-    );
+    // const paragraphBlocks: BlockObjectRequest[] = chunkText(summary_text).map(
+    //   (chunk) => ({
+    //     object: "block",
+    //     type: "paragraph",
+    //     paragraph: {
+    //       rich_text: [{ type: "text", text: { content: chunk } }],
+    //     },
+    //   })
+    // );
 
     const workspaceResponse = await notion.search({ filter: { property: "object", value: "page" } });
     const parentPageId = workspaceResponse.results[0]?.id;
     if (!parentPageId) throw new Error("No pages found in user's Notion workspace");
+
     const response = await notion.pages.create({
       parent: { type: "page_id", page_id:parentPageId },
       properties: {
@@ -73,7 +78,7 @@ export async function exportSummaryToNotion({
             rich_text: [{ type: "text", text: { content: "Document Summary" } }],
           },
         },
-        ...paragraphBlocks,
+        ...initialBlocks,
       ],
     });
     if (!isFullPage(response)) {
