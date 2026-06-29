@@ -5,13 +5,14 @@ import DownloadButton from "./downloadButton";
 import QuizSection from "./quizSection";
 import NotionButton from "./notion-button";
 
-export default function SourceInfo({id, original_file_url, file_name, title, summary_text, created_at}: {
+export default function SourceInfo({id, original_file_url, file_name, title, summary_text, created_at,notion_page_url}: {
     id:string;
     original_file_url: string;
     file_name: string;
     title: string;
     summary_text: string;
     created_at: string;
+    notion_page_url?: string;
 }) {
     return (
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 lg:gap-12 pt-5 text-sm text-muted-foreground flex-wrap">
@@ -38,7 +39,7 @@ export default function SourceInfo({id, original_file_url, file_name, title, sum
 
                 <DownloadButton file_name={file_name} created_at={created_at} title={title} summary_text={summary_text}/>
                 <QuizSection id={id}/>
-                <NotionButton summary_text={summary_text} title={title}  />
+                <NotionButton summary_text={summary_text} title={title} summary_id={id} initial_url={notion_page_url} />
             </div>
 
         </div>

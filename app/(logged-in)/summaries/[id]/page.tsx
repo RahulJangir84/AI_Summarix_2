@@ -16,7 +16,7 @@ export default async function Page({params}: {
       </div>
     );
   }
-  const {title,summary_text,file_name,created_at,word_count,original_file_url}=summary;
+  const {title,summary_text,file_name,created_at,word_count,original_file_url,notion_page_url}=summary;
   const readingTime=Math.ceil((word_count||0)/100);
 
   
@@ -25,7 +25,7 @@ export default async function Page({params}: {
         <div className="px-4 bg-linear-to-b from-indigo-100/40 to-indigo-200/50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800 sm:px-6 lg:px-8 py-6 sm:py-12 lg:py-24">
             <div className="flex flex-col">
                 <SummaryHeader title={title} created_at={created_at.toDateString()} readingTime={readingTime}/>
-                <SourceInfo id ={id} original_file_url={original_file_url} file_name={file_name} title={title} summary_text={summary_text} created_at={created_at.toDateString()}/>
+                <SourceInfo id ={id} original_file_url={original_file_url} file_name={file_name} title={title} summary_text={summary_text} created_at={created_at.toDateString()} notion_page_url={notion_page_url}/>
                 <SummarySlider summary={summary_text}/>
             </div>
             <ChatWidget summaryText={summary_text} />

@@ -8,6 +8,7 @@ export interface Summary {
   file_name?: string;
   summary_text: string;
   original_file_url?: string;
+  notion_page_url?: string;
   status: string;
   created_at: string;
   updated_at?: string;

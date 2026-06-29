@@ -45,7 +45,7 @@ describe('hasReachedUploadLimit', () => {
       return [];
     });
 
-    vi.mocked(getDbConnection).mockResolvedValue(mockSql as unknown as ReturnType<typeof getDbConnection>);
+    vi.mocked(getDbConnection).mockResolvedValue(mockSql as any);
 
     const result = await hasReachedUploadLimit('user-123', 'free@example.com');
 
@@ -69,7 +69,7 @@ describe('hasReachedUploadLimit', () => {
       return [];
     });
 
-    vi.mocked(getDbConnection).mockResolvedValue(mockSql as unknown as ReturnType<typeof getDbConnection>);
+    vi.mocked(getDbConnection).mockResolvedValue(mockSql as any);
 
     const result = await hasReachedUploadLimit('user-123', 'free@example.com');
 
@@ -89,7 +89,7 @@ describe('hasReachedUploadLimit', () => {
       return [];
     });
 
-    vi.mocked(getDbConnection).mockResolvedValue(mockSql as unknown as ReturnType<typeof getDbConnection>);
+    vi.mocked(getDbConnection).mockResolvedValue(mockSql as any);
 
     const result = await hasReachedUploadLimit('user-123', 'pro@example.com');
 
