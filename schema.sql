@@ -19,6 +19,7 @@ CREATE TABLE pdf_summary (
     status VARCHAR(50) DEFAULT 'completed',
     title TEXT,
     file_name TEXT,
+    notion_page_url TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
