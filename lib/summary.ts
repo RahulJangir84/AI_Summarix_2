@@ -41,7 +41,6 @@ export async function getSummaryById(id: string) {
     }
     catch(error){
       logger.error( {error, summaryId: id },"Error fetching summary by ID")
-        // console.error("Error fetching summary:", error);
     return null;
   }
 }

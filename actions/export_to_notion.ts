@@ -37,7 +37,7 @@ export async function exportSummaryToNotion({
     if (!tokens) {
       throw new Error("Failed to get OAuth token");
     }
-    console.log("Notion tokens response:", JSON.stringify(tokens, null, 2));
+    logger.info({userId},"Notion tokens response:", JSON.stringify(tokens, null, 2));
     const accessToken = tokens.data[0]?.token;
     if (!accessToken) {
       logger.error({ userId }, "Failed to fetch OAuth token");

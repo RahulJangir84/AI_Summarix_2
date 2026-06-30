@@ -53,18 +53,18 @@ export async function generatePdfSummary(
 
   try {
     const pdfText = await fetchAndExtractPdfText(pdfUrl);
-    console.log({ pdfText });
+    logger.info({ pdfText });
 
     let summary;
     try {
       summary = await generateSummaryFromGeminiAPI(pdfText);
-      console.log({ summary });
+      logger.info({ summary });
     } catch (error) {
       logger.error({ error,pdfName },"Gemini summary generation failed, attempting OpenAI fallback");
       if (error instanceof Error && error.message === "Rate limit exceeded") {
         try {
           summary = await generateSummaryFromOpenAI(pdfText);
-          console.log(summary);
+          logger.info(summary);
         } catch (geminiError) {
           logger.error({ geminiError,pdfName },"OpenAI API fallback also failed")
           throw new Error("Summary generation failed");

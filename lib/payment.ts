@@ -7,7 +7,7 @@ export async function handleCheckoutSession({session,stripe}:{
     stripe:Stripe
     }
 ){
-    console.log("handle checkout session",session);
+    logger.info({session },"handle checkout session",);
     const customerId=session.customer as string;
     const customer=await stripe.customers.retrieve(customerId);
     const priceId=session.line_items?.data[0].price?.id as string;
@@ -47,7 +47,6 @@ async function createOrUpdateUser({
         }
     }catch(error){
         logger.error({error, email },"Failed to create or update user in database during stripe sync");
-        // console.log(error);
     }
 }
 async function createPaymentSession({
@@ -68,7 +67,6 @@ async function createPaymentSession({
     }
     catch(error){
         logger.error({error, email },"Failed to insert payment record in database during stripe sync");
-        // console.log(error);
     }
 }
 

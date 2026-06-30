@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
     try{
         switch (event.type){
             case "checkout.session.completed":
-                console.log("customer session created");
+                logger.info("customer session created");
                 const sessionID = event.data.object.id;
                 const session = await stripe.checkout.sessions.retrieve(sessionID,{
                     expand:["line_items"]
@@ -34,14 +34,14 @@ export async function POST(req: NextRequest) {
                 await handleCheckoutSession({session,stripe});
                 break;
             case "customer.subscription.deleted":
-                console.log("customer subscription deleted");
+                logger.info("customer subscription deleted");
                 const subscription = event.data.object ;
                 const subscriptionId=event.data.object.id;
                 await deleteSubscription({subscriptionId,stripe});
-                console.log(subscription);
+                logger.info(subscription);
                 break;
             default:
-                console.log(`Unhandled event type ${event.type}`);
+                logger.info(`Unhandled event type ${event.type}`);
         }
     }catch(error){
         logger.error({error,eventType: event.type },"Error occurred while processing Stripe webhook handler");

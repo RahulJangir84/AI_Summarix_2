@@ -3,7 +3,7 @@ import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
 import { hasReachedUploadLimit } from "@/lib/user";
 import { toast } from "sonner";
-
+import { logger } from "@/lib/logger";
 const f = createUploadthing();
 
 export const ourFileRouter = {
@@ -26,8 +26,8 @@ export const ourFileRouter = {
       return { userId: user.id };
     })
     .onUploadComplete(async ({ metadata, file }) => {
-      console.log("Upload complete for userId:", metadata.userId);
-      console.log("File url:", file.ufsUrl);
+      logger.info({userId: metadata.userId},"Upload complete for userId:");
+      logger.info({fileUrl: file.ufsUrl},"File url:");
       return {
         userId: metadata.userId,
         file: { url: file.ufsUrl, name: file.name },

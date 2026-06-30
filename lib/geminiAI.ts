@@ -28,7 +28,7 @@ export async function generateSummaryFromGeminiAPI(pdfText: string) {
 
       return summary;
   } catch (error:any) {
-    console.error("Gemini summary generation failed", error);
+    logger.error({error },"Gemini summary generation failed");
     if(error.status===503 && attempt<maxRetries){
       await new Promise(resolve => setTimeout(resolve, 2000 * attempt));
         continue;
