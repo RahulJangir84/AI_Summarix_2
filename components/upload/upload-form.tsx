@@ -8,8 +8,9 @@ import {
   saveSummaryToDatabase,
 } from "@/actions/upload-action";
 import { useRef, useState } from "react";
-import router from "next/router";
-//to validate the file
+import { useRouter } from "next/navigation";
+
+// Validate the file before uploading
 const schema = z.object({
   file: z
     .instanceof(File, { message: "Invalid file" })
@@ -23,21 +24,22 @@ const schema = z.object({
     ),
 });
 export default function UploadForm() {
+  const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const { startUpload} = useUploadThing("pdfUploader", {
     onClientUploadComplete: () => {
-      console.log("Uploaded successfully");
+      console.info("Uploaded successfully");
     },
     onUploadError: (err) => {
-      console.error("error occured while uploading", err);
-      toast.error("Error occured while uploading", {
+      toast.error("Upload failed", {
         description: err.message,
       });
     },
-    onUploadBegin: (fileName) => {
-      console.log("Upload has begun for", fileName);
+    onUploadBegin: () => {
+      // Loading state is already shown via isLoading
+      console.info("Upload started");
     },
   });
 
@@ -47,7 +49,6 @@ export default function UploadForm() {
 
     try {
       setIsLoading(true);
-      console.log("submitted");
       const formData = new FormData(e.currentTarget);
       const file = formData.get("file") as File;
       //validation
@@ -85,7 +86,7 @@ export default function UploadForm() {
 
       //parse the pdf using langchain
       const summary = await generatePdfSummary(resp);
-      console.log({ summary });
+      console.info({summary},"Summary generated from PDF");
 
       let data;
       if (summary) {
@@ -93,7 +94,7 @@ export default function UploadForm() {
       } else {
         data = null;
       }
-      console.log({data});
+      console.info({data},"Data received from summary generation");
       
       if (data) {
         let storeResponse: { success: boolean; message: string; data?: { id: string } | null } | undefined;
@@ -104,11 +105,11 @@ export default function UploadForm() {
         // upload to database if summary is not null
         if (data.summary) {
           storeResponse = await saveSummaryToDatabase({
-            summary: data.summary,
+          summary: data.summary,
             pdfUrl: resp[0].serverData.file.url, //got the uploadthing
-            title: data.title,
-            pdfName: file.name,
-          });
+          title: data.title,
+          pdfName: file.name,
+        });
 
           if (storeResponse && storeResponse.success && storeResponse.data) {
             toast.success("Summary Generated", {
@@ -118,17 +119,18 @@ export default function UploadForm() {
 
             formRef.current?.reset();
             //redirect to summary page as soon as summary is saved
-            router.push(`/summary/${storeResponse.data.id}`);
-          } else {
+             router.push(`/summaries/${storeResponse.data.id}`);
+      } else {
             toast.error("Error saving summary", {
               description: storeResponse?.message || "Failed to save summary",
-            });
+        });
           }
         }
       }
     } catch (error) {
-      setIsLoading(false);
-      console.log("Error Occured", error);
+      toast.error("Something went wrong", {
+        description: error instanceof Error ? error.message : "Please try again",
+      });
       formRef.current?.reset();
     } finally {
       setIsLoading(false);

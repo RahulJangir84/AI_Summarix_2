@@ -1,8 +1,15 @@
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { convertToModelMessages, streamText } from 'ai';
 import { logger } from "@/lib/logger";
+import { auth } from '@clerk/nextjs/server';
 
 export async function POST(req: Request) {
+
+  const {userId}= await auth();
+  if(!userId){
+    logger.error("User not authenticated");
+    return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
+  }
   try {
     if(!process.env.GEMINI_API_KEY){
       logger.error("Gemini API key missing in environment variables");

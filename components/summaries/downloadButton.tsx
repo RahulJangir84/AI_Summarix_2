@@ -100,7 +100,7 @@ export default function DownloadButton({
       }, 2000);
 
     } catch (error) {
-      console.error("Failed to generate PDF", error);
+      console.error("Failed to generate PDF:", error);
       setIsDownloading(false);
     }
   };
