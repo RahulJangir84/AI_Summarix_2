@@ -39,6 +39,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           script: |
+            set -e
             export PATH="/home/ubuntu/.nvm/versions/node/v24.18.0/bin:$PATH"
             cd /home/ubuntu/AI_Summarix_2
             git checkout production
