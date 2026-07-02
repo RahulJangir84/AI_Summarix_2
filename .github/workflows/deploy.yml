@@ -39,10 +39,10 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           script: |
-            NODE_BIN="/home/ubuntu/.nvm/versions/node/v24.18.0/bin"
+            export PATH="/home/ubuntu/.nvm/versions/node/v24.18.0/bin:$PATH"
             cd /home/ubuntu/AI_Summarix_2
             git checkout production
             git pull origin production
-            $NODE_BIN/npm ci
-            $NODE_BIN/npm run build
-            $NODE_BIN/pm2 reload nextjs-app || $NODE_BIN/pm2 start $NODE_BIN/npm --name "nextjs-app" -- start
+            npm ci
+            npm run build
+            pm2 reload nextjs-app || pm2 start npm --name "nextjs-app" -- start
