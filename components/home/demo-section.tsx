@@ -45,14 +45,12 @@ export default function DemoSection() {
       <div className="relative z-10 py-20 lg:py-20 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center text-center">
 
-          {/* Section Tag */}
           <MotionDiv variants={itemVariants} className="mb-6">
             <div className="inline-flex items-center gap-2 rounded-full border border-indigo-200 dark:border-indigo-500/30 bg-indigo-50/80 dark:bg-indigo-950/50 px-4 py-1.5 text-sm font-medium text-indigo-600 dark:text-indigo-300">
               Live Demo
             </div>
           </MotionDiv>
 
-          {/* Heading */}
           <MotionDiv variants={itemVariants} className="mb-4">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white leading-tight max-w-3xl mx-auto">
               See the{" "}
@@ -70,19 +68,15 @@ export default function DemoSection() {
             </p>
           </MotionDiv>
 
-          {/* Compare Widget with glow border */}
           <MotionDiv
             variants={itemVariants}
             className="relative"
           >
-            {/* Glow effect */}
             <div className="absolute -inset-1 rounded-3xl bg-[#666bae] opacity-20 dark:opacity-30 blur-lg" />
             <div className="relative rounded-3xl overflow-hidden border border-slate-200 dark:border-white/10 shadow-2xl">
               <CompareDemo />
             </div>
           </MotionDiv>
-
-          {/* Labels */}
         </div>
       </div>
     </MotionSection>

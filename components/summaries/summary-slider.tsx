@@ -59,11 +59,8 @@ export default function SummaryPage({ summary }: { summary: string }) {
     <div className="w-full max-w-3xl mx-auto mt-6 sm:mt-8 px-3 sm:px-4 lg:px-0">
       <div className="relative bg-gradient-to-br from-white to-indigo-50/40 dark:bg-linear-to-b dark:from-[#1E293B] dark:to-[#273449] rounded-2xl sm:rounded-3xl shadow-xl shadow-indigo-100/60 border border-indigo-100 dark:border-slate-700 dark:shadow-none overflow-hidden">
 
-        {/* Background blobs */}
         <div className="pointer-events-none absolute -top-16 -right-16 w-40 sm:w-56 h-40 sm:h-56 rounded-full bg-indigo-200/20 blur-3xl dark:bg-[#1E293B]" />
         <div className="pointer-events-none absolute -bottom-16 -left-16 w-40 sm:w-56 h-40 sm:h-56 rounded-full bg-violet-200/20 blur-3xl dark:bg-[#273449]" />
-
-        {/* Header */}
         <div className="relative flex items-center justify-between px-4 sm:px-6 lg:px-8 pt-5 sm:pt-7 pb-4 sm:pb-5 border-b border-indigo-100/70">
           <div className="flex items-center gap-2 sm:gap-3">
             <div className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-indigo-600 dark:bg-indigo-700/60 shadow-md shadow-indigo-300/40 dark:shadow-none shrink-0">
@@ -89,13 +86,10 @@ export default function SummaryPage({ summary }: { summary: string }) {
           </div>
         </div>
 
-        {/* Full Content */}
         <div className="relative px-4 sm:px-6 lg:px-8 py-5 sm:py-8">
           <FullContent text={summary} />
         </div>
       </div>
-
-      {/* Footer */}
       <div className="flex items-center justify-center gap-1.5 mt-3 sm:mt-4">
         <FileText size={12} className="text-gray-700 dark:text-slate-400" />
         <span className="text-[11px] text-gray-700 font-medium dark:text-slate-400">

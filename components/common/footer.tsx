@@ -16,7 +16,6 @@ export default function Footer() {
           </p>
         </div>
 
-        {/* Product */}
         <div>
           <h3 className="font-semibold text-base sm:text-xl text-gray-200 dark:text-white mb-2 sm:mb-3">
             Product
@@ -28,7 +27,6 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Company */}
         <div>
           <h3 className="font-semibold text-base sm:text-xl text-gray-200 dark:text-white mb-2 sm:mb-3">
             Company
@@ -40,7 +38,7 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Connect */}
+
         <div>
           <h3 className="font-semibold text-base sm:text-xl text-gray-200 dark:text-white mb-2 sm:mb-3">
             Connect
@@ -60,7 +58,6 @@ export default function Footer() {
 
       </div>
 
-      {/* Bottom Bar */}
       <div className="border-t border-white/10 text-center py-3 sm:py-4 text-xs sm:text-sm text-gray-200 dark:text-slate-500">
         © {new Date().getFullYear()} Summarix. All rights reserved.
       </div>

@@ -55,11 +55,17 @@ export default function NotionButton({ summary_text, title,summary_id,initial_ur
             } else {
                 throw new Error("No redirect URL returned from Clerk Notion flow");
             }
-        } catch (error: any) {
+        } catch (error) {
             console.error("Error connecting Notion account:", error);
+            if(error instanceof Error){
             toast.error("Error connecting to Notion", {
                 description: error.message || "Failed to initiate Notion connection",
             });
+        } else{
+            toast.error("Error connecting to Notion", {
+                description: "Failed to initiate Notion connection",
+            });
+        }
         } finally {
             setIsConnecting(false);
         }

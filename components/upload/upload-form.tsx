@@ -22,14 +22,11 @@ const schema = z.object({
       "File must be a PDF",
     ),
 });
-
-//
-
 export default function UploadForm() {
   const formRef = useRef<HTMLFormElement>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { startUpload, routeConfig } = useUploadThing("pdfUploader", {
+  const { startUpload} = useUploadThing("pdfUploader", {
     onClientUploadComplete: () => {
       console.log("Uploaded successfully");
     },
