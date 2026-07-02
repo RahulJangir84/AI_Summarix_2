@@ -10,7 +10,7 @@ const splitter = new RecursiveCharacterTextSplitter({
 
 
 export async function getPdfBufferAndText(fileUrl: string) {
-  logger.info({ fileUrl },"Fetching PDF from URL:");
+  logger.info({ fileUrl }, "Fetching PDF from URL:");
   const response = await fetch(fileUrl);
   if (!response.ok) {
     throw new Error(`Failed to fetch PDF: ${response.statusText} (URL: ${fileUrl})`);
@@ -23,7 +23,7 @@ export async function getPdfBufferAndText(fileUrl: string) {
   const loader = new PDFLoader(new Blob([arrayBuffer]));
   const docs = await loader.load();
   const chunks = await splitter.splitDocuments(docs);
-  let text = chunks.map(chunk => chunk.pageContent).join("\n");
+  const text = chunks.map(chunk => chunk.pageContent).join("\n");
   return { buffer, text };
 }
 
@@ -40,7 +40,7 @@ export async function fetchAndExtractPdfText(fileUrl: string) {
         text = ocrText;
       }
     } catch (error) {
-      logger.error({error,fileUrl } ,"OCR fallback extraction failed");
+      logger.error({ error, fileUrl }, "OCR fallback extraction failed");
     }
   }
 

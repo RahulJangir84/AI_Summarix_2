@@ -31,7 +31,7 @@ export default function DemoSection() {
           <div>&nbsp;&nbsp;.then(render)</div>
         </div>
         <div className="absolute top-1/2 left-2 rotate-[-3deg] font-mono text-xs text-blue-600 dark:text-blue-400 leading-relaxed hidden lg:block">
-          <div>// Processing...</div>
+          <div>Processing...</div>
           <div>const insight =</div>
           <div>&nbsp;&nbsp;await analyze(pdf)</div>
         </div>

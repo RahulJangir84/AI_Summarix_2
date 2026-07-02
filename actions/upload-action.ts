@@ -17,6 +17,10 @@ interface PdfSummaryProps {
   title: string;
   pdfName: string;
 }
+interface SavedPdfSummary {
+  id: string | number;
+  summary_text: string;
+}
 
 export async function generatePdfSummary(
   uploadResponse: {
@@ -128,7 +132,7 @@ async function savePdfSummary({
         )
         RETURNING id, summary_text;
         `;
-    return savedSummary;
+    return savedSummary as SavedPdfSummary;
   } catch (error) {
     logger.error({error ,pdfName },"Failed to insert PDF summary into database");
     throw error;
@@ -141,7 +145,7 @@ export async function saveSummaryToDatabase({
   title,
   pdfName,
 }: PdfSummaryProps) {
-  let savedSummary: any;
+  let savedSummary: SavedPdfSummary;
   try {
     const { userId } = await auth();
     if (!userId) {

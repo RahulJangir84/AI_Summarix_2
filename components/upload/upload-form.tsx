@@ -96,7 +96,7 @@ export default function UploadForm() {
       console.log({data});
       
       if (data) {
-        let storeResponse: any;
+        let storeResponse: { success: boolean; message: string; data?: { id: string } | null } | undefined;
         toast.success("Saving PDF..", {
           description: "Please wait while we save your summary",
         });
@@ -110,7 +110,7 @@ export default function UploadForm() {
             pdfName: file.name,
           });
 
-          if (storeResponse.success) {
+          if (storeResponse && storeResponse.success && storeResponse.data) {
             toast.success("Summary Generated", {
               description:
                 "Your PDF has been saved successfully summarized and saved",
@@ -121,7 +121,7 @@ export default function UploadForm() {
             router.push(`/summary/${storeResponse.data.id}`);
           } else {
             toast.error("Error saving summary", {
-              description: storeResponse.message,
+              description: storeResponse?.message || "Failed to save summary",
             });
           }
         }

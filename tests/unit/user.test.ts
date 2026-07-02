@@ -68,9 +68,9 @@ describe('hasReachedUploadLimit', () => {
         return [];
       }
       return [];
-    });
+    }) as unknown as NeonQueryFunction<false,false>
 
-    vi.mocked(getDbConnection).mockResolvedValue(mockSql as any);
+    vi.mocked(getDbConnection).mockResolvedValue(mockSql);
 
     const result = await hasReachedUploadLimit('user-123', 'free@example.com');
 
@@ -88,9 +88,9 @@ describe('hasReachedUploadLimit', () => {
         return [{ price_id: 'price_pro_123' }]; // Mocked Pro price ID
       }
       return [];
-    });
+    }) as unknown as NeonQueryFunction<false,false>
 
-    vi.mocked(getDbConnection).mockResolvedValue(mockSql as any);
+    vi.mocked(getDbConnection).mockResolvedValue(mockSql);
 
     const result = await hasReachedUploadLimit('user-123', 'pro@example.com');
 
