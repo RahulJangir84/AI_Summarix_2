@@ -35,7 +35,6 @@ export default function NotionButton({ summary_text, title,summary_id,initial_ur
         return null;
     }
     // Check if there is an external account connected for provider "notion"
-    console.log(user.externalAccounts);
     const notionAccount = user?.externalAccounts.find(
         (account) => account.provider === "notion"
     );
