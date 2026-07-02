@@ -7,10 +7,9 @@ import { useUser, useReverification } from "@clerk/nextjs";
 import { toast } from "sonner";
 import { ExternalLink, Loader2 } from "lucide-react";
 
-export default function NotionButton({ summary_text, title,notion_page_url,summary_id,initial_url }: {
+export default function NotionButton({ summary_text, title,summary_id,initial_url }: {
     summary_text: string;
     title: string;
-    notion_page_url?: string;
     summary_id:string;
     initial_url?:string
 }) {
@@ -80,11 +79,18 @@ export default function NotionButton({ summary_text, title,notion_page_url,summa
                     },
                 });
             }
-        } catch (error: any) {
+        } catch (error) {
             console.error("Error exporting to Notion:", error);
+            if(error instanceof Error){
             toast.error("Error exporting to Notion", {
                 description: error.message || "Failed to export summary to Notion",
             });
+        }
+        else{
+            toast.error("Error exporting to Notion", {
+                description: "Failed to export summary to Notion",
+            });
+        }
         } finally {
             setIsExporting(false);
         }

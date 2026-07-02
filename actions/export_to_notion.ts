@@ -8,15 +8,6 @@ import { BlockObjectRequest } from "@notionhq/client/build/src/api-endpoints";
 import { getDbConnection } from "@/lib/database";
 import { markdownToBlocks } from '@tryfabric/martian';
 
-
-function chunkText(text: string, chunkSize = 1900): string[] {
-  const chunks: string[] = [];
-  for (let i = 0; i < text.length; i += chunkSize) {
-    chunks.push(text.slice(i, i + chunkSize));
-  }
-  return chunks;
-}
-
 export async function exportSummaryToNotion({
   summary_text, title, summary_id
 }: {
@@ -48,17 +39,6 @@ export async function exportSummaryToNotion({
     });
     const allBlocks = markdownToBlocks(summary_text) as BlockObjectRequest[];
     const initialBlocks = allBlocks.slice(0, 100);
-
-    // const paragraphBlocks: BlockObjectRequest[] = chunkText(summary_text).map(
-    //   (chunk) => ({
-    //     object: "block",
-    //     type: "paragraph",
-    //     paragraph: {
-    //       rich_text: [{ type: "text", text: { content: chunk } }],
-    //     },
-    //   })
-    // );
-
     const workspaceResponse = await notion.search({ filter: { property: "object", value: "page" } });
     const parentPageId = workspaceResponse.results[0]?.id;
     if (!parentPageId) throw new Error("No pages found in user's Notion workspace");

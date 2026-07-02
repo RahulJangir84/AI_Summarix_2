@@ -1,5 +1,5 @@
 "use client";
-import { BrainCircuit, FileOutput, FileText, ArrowRight } from "lucide-react";
+import { BrainCircuit, FileOutput, FileText} from "lucide-react";
 import { ReactNode, useRef } from "react";
 import { containerVariants, itemVariants } from "@/utils/constants";
 import { MotionSection, MotionDiv } from "../common/motion";

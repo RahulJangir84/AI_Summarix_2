@@ -1,6 +1,5 @@
 import { LayoutTextFlip } from "../ui/layout-text-flip";
-import { Button } from "../ui/button";
-import { Zap, ChevronRight, Sparkles } from "lucide-react";
+import { Zap, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { AnimatedTooltip } from "../ui/animated-tooltip";
 import { BackgroundRippleEffect } from "../ui/background-ripple-effect";

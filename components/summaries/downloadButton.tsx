@@ -3,7 +3,6 @@ import { Button } from "../ui/button";
 import { Download, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { marked } from "marked";
-import { toast } from "sonner";
 
 export default function DownloadButton({
   file_name,

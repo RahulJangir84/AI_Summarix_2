@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { ArrowRight, CheckIcon, Zap, Star } from "lucide-react";
 import constants, { containerVariants, itemVariants } from "@/utils/constants";
 import { MotionDiv, MotionSection } from "../common/motion";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState} from "react";
 
 type PriceType = {
   id: string;

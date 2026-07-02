@@ -2,7 +2,6 @@
 import { containerVariants, itemVariants } from "@/utils/constants";
 import { MotionSection, MotionDiv } from "../common/motion";
 import CompareDemo from "../compare-demo";
-import { Sparkles } from "lucide-react";
 
 export default function DemoSection() {
   return (
@@ -21,9 +20,9 @@ export default function DemoSection() {
       <div className="pointer-events-none absolute inset-0 overflow-hidden opacity-20">
         <div className="absolute top-12 left-8 rotate-[-6deg] font-mono text-xs text-indigo-600 dark:text-indigo-400 leading-relaxed">
           <div>{"{"}</div>
-          <div>&nbsp;&nbsp;"summary": "AI-powered...",</div>
-          <div>&nbsp;&nbsp;"pages": 42,</div>
-          <div>&nbsp;&nbsp;"time": "2.3s"</div>
+          <div>&nbsp;&nbsp;`&quot;summary`&quot;: `&quot;AI-powered...&quot;`,</div>
+          <div>&nbsp;&nbsp;`&quot;pages`&quot;: 42,</div>
+          <div>&nbsp;&nbsp;`&quot;time`&quot;: `&quot;2.3s&quot;`</div>
           <div>{"}"}</div>
         </div>
         <div className="absolute bottom-20 right-10 rotate-[4deg] font-mono text-xs text-violet-600 dark:text-violet-400 leading-relaxed">

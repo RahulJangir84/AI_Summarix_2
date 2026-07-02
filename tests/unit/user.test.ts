@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { hasReachedUploadLimit } from '@/lib/user';
 import { getDbConnection } from '@/lib/database';
+import { NeonQueryFunction } from '@neondatabase/serverless';
 
 vi.mock('@/lib/database', () => {
   return {
@@ -43,9 +44,9 @@ describe('hasReachedUploadLimit', () => {
         return []; // Free tier
       }
       return [];
-    });
+    }) as unknown as NeonQueryFunction<false,false>
 
-    vi.mocked(getDbConnection).mockResolvedValue(mockSql as any);
+    vi.mocked(getDbConnection).mockResolvedValue(mockSql);
 
     const result = await hasReachedUploadLimit('user-123', 'free@example.com');
 
